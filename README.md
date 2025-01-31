@@ -1,13 +1,4 @@
-# MarSUKAT - Marinduque State University Kasuotan Akademiko Tracking System
-
-<div align="center">
-  <div style="margin-bottom: 20px;">
-    <img src="./src/assets/logo_msc.jpg" alt="MarSUKAT Logo" width="200"/>
-    <p><strong>MarSUKAT Logo</strong></p>
-  </div>
-  
-  <p><em>A comprehensive academic apparel management system for Marinduque State University</em></p>
-</div>
+# MarSUKAT - Production Monitoring and Inventory Management System
 
 ## 📖 About
 
@@ -109,15 +100,40 @@ npm run dev
 
 ## 📁 Project Structure
 
+**Frontend**
 ```
 MarSUKAT/
-├── src/                # Frontend source files
 ├── public/             # Public assets
-└── MarSUKAT-Server/    # Backend server
-    ├── controllers/    # Route controllers
-    ├── models/         # Database models
-    ├── routes/         # API routes
-    └── views/          # Email templates
+├── src/                # Frontend source files
+├── .env                # Environment variables
+├── eslint.config.js    # ESLint configuration
+├── .gitignore          # Git ignore file
+├── index.html          # HTML entry point
+├── jsconfig.json       # JavaScript configuration
+├── package-lock.json   # Package lock file
+├── package.json        # Project dependencies
+├── postcss.config.js   # PostCSS configuration
+├── tailwind.config.js  # TailwindCSS configuration
+├── vite.config.js      # Vite configuration
+├── vercel.json         # Vercel configuration
+├── vite.config.js      # Vite configuration
+```
+
+**Backend**
+```
+MarSUKAT-Server/
+├── app/                # Express application
+├── controllers/        # Route controllers
+├── models/             # Database models
+├── public/             # Public assets
+├── routes/             # API routes
+├── views/              # Email templates
+├── .env                # Environment variables
+├── .gitignore          # Git ignore file
+├── index.js            # Server entry point
+├── package.json        # Project dependencies
+├── package-lock.json   # Package lock file
+├── vercel.json         # Vercel configuration
 ```
 
 ## 🤝 Contributing
