@@ -6,17 +6,6 @@
     <p><strong>MarSUKAT Logo</strong></p>
   </div>
   
-  <div style="margin-bottom: 20px;">
-    <img src="./images/bao.jpg" alt="Business Administration Office" width="200"/>
-    <p><strong>Business Administration Office (BAO)</strong></p>
-  </div>
-  
-  <div style="margin-bottom: 20px;">
-    <img src="./images/jo.jpg" alt="Job Order" width="200"/>
-    <p><strong>Job Order (JO)</strong></p>
-  </div>
-  
-  
   <p><em>A comprehensive academic apparel management system for Marinduque State University</em></p>
 </div>
 
