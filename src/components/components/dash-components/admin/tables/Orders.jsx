@@ -42,6 +42,7 @@ import EditOrderItems from "@/components/components/forms/EditOrderItmes";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import OrderDetailsModal from "@/components/components/custom-components/OrderDetailsModal";
+import ReceiptModal from "@/components/components/custom-components/ReceiptModal";
 
 function Orders() {
   const [data, setData] = useState([]);
@@ -61,9 +62,36 @@ function Orders() {
   const [loadingReject, setLoadingReject] = useState(false);
   const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false);
   const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+  const [selectedOrderReceipts, setSelectedOrderReceipts] = useState(null);
+  const [loadingReceipts, setLoadingReceipts] = useState(false);
 
-  const handleViewReceipts = (order) => {
-    navigate(`/orders/receipts/${order}`);
+  const handleViewReceipts = async (orderId) => {
+    try {
+      setLoadingReceipts(true);
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/order/student/receipt/${orderId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+      setSelectedOrderReceipts(
+        response.data.receipts.map((receipt) => ({
+          ...receipt,
+          orderId,
+        }))
+      );
+      setIsReceiptModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching receipts:", error);
+      toast.error("Failed to load receipts");
+    } finally {
+      setLoadingReceipts(false);
+    }
   };
 
   useEffect(() => {
@@ -636,6 +664,57 @@ function Orders() {
     );
   };
 
+  const handleVerifyReceipt = async (receipt, shouldApproveOrder) => {
+    try {
+      // Update the receipt's verification status in the UI
+      setData((prevData) =>
+        prevData.map((order) => {
+          if (order._id === receipt.orderId) {
+            const updatedReceipts =
+              order.receipts?.map((r) =>
+                r._id === receipt._id ? { ...r, isVerified: true } : r
+              ) || [];
+
+            // If shouldApproveOrder is true, also update the order status
+            return shouldApproveOrder
+              ? { ...order, receipts: updatedReceipts, status: "APPROVED" }
+              : { ...order, receipts: updatedReceipts };
+          }
+          return order;
+        })
+      );
+
+      // If this is a down payment verification, update the order status
+      if (shouldApproveOrder) {
+        const orderToUpdate = data.find(
+          (order) => order._id === receipt.orderId
+        );
+        if (orderToUpdate) {
+          await axios.put(
+            `${BASE_URL}/api/v1/order/update/student/${orderToUpdate._id}`,
+            { status: "APPROVED" },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              withCredentials: true,
+            }
+          );
+        }
+      }
+
+      toast.success(
+        `Receipt verified ${
+          shouldApproveOrder ? "and order approved " : ""
+        }successfully!`
+      );
+    } catch (error) {
+      console.error("Error handling receipt verification:", error);
+      toast.error("Failed to verify receipt");
+    }
+  };
+
   return (
     <Spin
       spinning={loadingUpdate}
@@ -667,6 +746,14 @@ function Orders() {
         <div className="rounded-md border">
           <CustomTable columns={columns} data={data} loading={loading} />
         </div>
+        <ReceiptModal
+          isOpen={isReceiptModalOpen}
+          onOpenChange={setIsReceiptModalOpen}
+          receipts={selectedOrderReceipts}
+          loading={loadingReceipts}
+          orderId={selectedOrderReceipts?.[0]?.orderId}
+          onVerifyReceipt={handleVerifyReceipt}
+        />
       </div>
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent className="max-h-[550px] max-w-[550px] overflow-auto">

@@ -36,6 +36,7 @@ import CustomPageTitle from "@/components/components/custom-components/CustomPag
 import { useMediaQuery } from "react-responsive";
 import OrderGrid from "@/components/components/custom-components/OrderGrid";
 import OrderDetailsModal from "@/components/components/custom-components/OrderDetailsModal";
+import ReceiptModal from "@/components/components/custom-components/ReceiptModal";
 
 function Orders() {
   const [data, setData] = useState([]);
@@ -52,13 +53,31 @@ function Orders() {
   const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
   const [finishedProducts, setFinishedProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+  const [selectedOrderReceipts, setSelectedOrderReceipts] = useState(null);
+  const [loadingReceipts, setLoadingReceipts] = useState(false);
 
-  const handleViewReceipts = (order) => {
-    navigate(`/orders/receipts/${order._id}`, {
-      state: {
-        selectedOrder: order, // Pass the selected order here
-      },
-    });
+  const handleViewReceipts = async (orderId) => {
+    try {
+      setLoadingReceipts(true);
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/order/student/receipt/${orderId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+      setSelectedOrderReceipts(response.data.receipts);
+      setIsReceiptModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching receipts:", error);
+      toast.error("Failed to load receipts");
+    } finally {
+      setLoadingReceipts(false);
+    }
   };
 
   const setNewCurrentBalance = (order) => {
@@ -422,7 +441,7 @@ function Orders() {
                   Add New Receipt
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem onClick={() => handleViewReceipts(order)}>
+              <DropdownMenuItem onClick={() => handleViewReceipts(order._id)}>
                 View Receipts
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleViewDetails(order)}>
@@ -502,6 +521,13 @@ function Orders() {
         <div className="hidden md:block rounded-md border">
           <CustomTable columns={columns} data={data} loading={loading} />
         </div>
+
+        <ReceiptModal
+          isOpen={isReceiptModalOpen}
+          onOpenChange={setIsReceiptModalOpen}
+          receipts={selectedOrderReceipts}
+          loading={loadingReceipts}
+        />
 
         <OrderDetailsModal
           isOpen={isDetailsOpen}
