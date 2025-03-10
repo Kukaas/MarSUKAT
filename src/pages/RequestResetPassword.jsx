@@ -30,6 +30,13 @@ import LeftSideDescription from "@/components/components/custom-components/LeftS
 
 // Import framer-motion for animations
 import { motion } from "framer-motion";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 const RequestResetPassword = () => {
   const dispatch = useDispatch();
@@ -97,7 +104,7 @@ const RequestResetPassword = () => {
 
   return (
     <motion.div
-      className="min-h-[450px] mt-[120px]"
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -105,70 +112,88 @@ const RequestResetPassword = () => {
       {loading1 ? (
         <Spin spinning={loading1} />
       ) : (
-        <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center">
-          {/* Left Description with animation */}
-          <motion.div
-            className="flex-1"
-            initial={{ x: -200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 100, duration: 0.6 }}
-          >
-            <LeftSideDescription
-              black="Forgot your "
-              gradient="password?"
-              description="Enter your email to reset your password"
-            />
-          </motion.div>
+        <div className="flex w-full max-w-5xl mx-auto gap-8 flex-col md:flex-row md:items-center">
+          {/* left */}
+          <div className="flex-1 hidden md:flex md:flex-col md:justify-center md:items-start">
+            <div className="scale-125 transform origin-left">
+              <LeftSideDescription
+                black="Forgot your "
+                gradient="password?"
+                description="Enter your email to reset your password"
+              />
+            </div>
+          </div>
 
-          {/* Right Form with animation */}
+          {/* right */}
           <motion.div
-            className="flex-1"
-            initial={{ x: 200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 100, duration: 0.6 }}
+            className="flex-1 w-full max-w-md"
+            initial={{ x: 100 }}
+            animate={{ x: 0 }}
+            transition={{ type: "spring", stiffness: 50 }}
           >
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSendOTP)}
-                className="flex flex-col gap-4"
-              >
-                <CustomInput
-                  form={form}
-                  name="email"
-                  label="Email"
-                  placeholder="Enter your email..."
-                />
-                <Button
-                  type="submit"
-                  className="w-full mt-3 rounded-lg text-white text-lg"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, hsla(48, 80%, 66%, 1) 0%, hsla(0, 100%, 25%, 1) 100%)",
-                  }}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <div className="flex items-center">
-                      <Loader2 className="mr-2 animate-spin" />
-                      <span>Submitting</span>
-                    </div>
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </form>
-            </Form>
-            <div>
-              <p className="text-center text-sm mt-3">
+            <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-card dark:bg-card/95">
+              <CardHeader className="space-y-1 bg-gradient-to-r from-muted/50 to-muted/30 dark:from-muted/10 dark:to-muted/5 pb-8">
+                <CardTitle className="text-2xl font-bold">
+                  Forgot Password
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Enter your email to receive a password reset link
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(handleSendOTP)}
+                    className="space-y-4"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-4"
+                    >
+                      <CustomInput
+                        form={form}
+                        name="email"
+                        label="Email"
+                        placeholder="Enter your email address"
+                      />
+                      <Button
+                        type="submit"
+                        className="w-full h-11 rounded-lg"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <div className="flex items-center justify-center">
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <span>Sending Reset Link</span>
+                          </div>
+                        ) : (
+                          "Send Reset Link"
+                        )}
+                      </Button>
+                    </motion.div>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+
+            <motion.div
+              className="mt-6 text-center text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <p className="text-muted-foreground">
                 Remembered your password?{" "}
                 <Link
                   to="/sign-in"
-                  className="text-blue-400 underline hover:text-blue-500"
+                  className="font-semibold text-primary hover:text-primary/80 transition-colors"
                 >
                   Sign in
                 </Link>
               </p>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       )}

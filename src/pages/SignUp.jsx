@@ -37,7 +37,7 @@ const SignUp = () => {
 
   return (
     <motion.div
-      className="min-h-[500px] mt-[50px] mb-8"
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -47,77 +47,112 @@ const SignUp = () => {
         <meta name="description" content="" />
         <meta name="keywords" content="marsu sign up, MarSUKAT" />
       </Helmet>
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center">
+      <div className="flex w-full max-w-5xl mx-auto gap-8 flex-col md:flex-row md:items-center">
         {/* left */}
-        <LeftSideDescription
-          black="Welcome to "
-          gradient="MarSUKAT"
-          description="Sign up to get started"
-        />
+        <div className="flex-1 hidden md:flex md:flex-col md:justify-center md:items-start">
+          <div className="scale-125 transform origin-left">
+            <LeftSideDescription
+              black="Welcome to "
+              gradient="MarSUKAT"
+              description="Sign up to get started"
+            />
+          </div>
+        </div>
         {/* right */}
         <motion.div
-          className="flex-1"
+          className="flex-1 w-full max-w-md"
           initial={{ x: 100 }}
           animate={{ x: 0 }}
           transition={{ type: "spring", stiffness: 50 }}
         >
           <Tabs defaultValue="student" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 gap-2">
-              <TabsTrigger value="student">Student</TabsTrigger>
-              <TabsTrigger value="coordinator">Coordinator</TabsTrigger>
-              <TabsTrigger value="commercial">Commercial</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 mb-8 rounded-2xl bg-muted/20 dark:bg-muted/10 p-1.5 backdrop-blur-sm">
+              <TabsTrigger
+                value="student"
+                className="rounded-xl py-2.5 text-sm font-medium transition-all data-[state=active]:bg-background dark:data-[state=active]:bg-secondary data-[state=active]:text-primary data-[state=active]:shadow-md"
+              >
+                Student
+              </TabsTrigger>
+              <TabsTrigger
+                value="coordinator"
+                className="rounded-xl py-2.5 text-sm font-medium transition-all data-[state=active]:bg-background dark:data-[state=active]:bg-secondary data-[state=active]:text-primary data-[state=active]:shadow-md"
+              >
+                Coordinator
+              </TabsTrigger>
+              <TabsTrigger
+                value="commercial"
+                className="rounded-xl py-2.5 text-sm font-medium transition-all data-[state=active]:bg-background dark:data-[state=active]:bg-secondary data-[state=active]:text-primary data-[state=active]:shadow-md"
+              >
+                Commercial
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="student">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Student Sign Up</CardTitle>
-                  <CardDescription>
-                    Sign up with your email and password.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <StudentSignUp />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="coordinator">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Coordinator</CardTitle>
-                  <CardDescription>
-                    Sign up with your email and password.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <CoordinatorSignUp />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="commercial">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Commercial Job</CardTitle>
-                  <CardDescription>
-                    Sign up with your email and password.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <CommercialSignUp />
-                </CardContent>
-              </Card>
-            </TabsContent>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TabsContent value="student">
+                <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-card dark:bg-card/95">
+                  <CardHeader className="space-y-1 bg-gradient-to-r from-muted/50 to-muted/30 dark:from-muted/10 dark:to-muted/5 pb-8">
+                    <CardTitle className="text-2xl font-bold">
+                      Student Sign Up
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      Create your student account to get started
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <StudentSignUp />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="coordinator">
+                <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-card dark:bg-card/95">
+                  <CardHeader className="space-y-1 bg-gradient-to-r from-muted/50 to-muted/30 dark:from-muted/10 dark:to-muted/5 pb-8">
+                    <CardTitle className="text-2xl font-bold">
+                      Coordinator Sign Up
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      Create your coordinator account to get started
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <CoordinatorSignUp />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="commercial">
+                <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-card dark:bg-card/95">
+                  <CardHeader className="space-y-1 bg-gradient-to-r from-muted/50 to-muted/30 dark:from-muted/10 dark:to-muted/5 pb-8">
+                    <CardTitle className="text-2xl font-bold">
+                      Commercial Sign Up
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      Create your commercial account to get started
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <CommercialSignUp />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </motion.div>
           </Tabs>
+
           <motion.div
-            className="mt-4 text-center text-sm"
+            className="mt-6 text-center text-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <p>
+            <p className="text-muted-foreground">
               Already have an account?{" "}
               <Link
                 to="/sign-in"
-                className="text-blue-400 underline hover:text-blue-500"
+                className="font-semibold text-primary hover:text-primary/80 transition-colors"
               >
                 Sign in
               </Link>

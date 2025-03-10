@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 const CommercialSignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -94,20 +95,25 @@ const CommercialSignUp = () => {
   const prevStep = () => setCurrentStep((prev) => prev - 1);
 
   return (
-    <div>
+    <div className="w-full">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleRegister)}
-          className="space-y-4"
+          className="space-y-6"
         >
           {currentStep === 1 && (
-            <div>
-              <div className="flex gap-3">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <CustomInput
                   form={form}
                   name="name"
                   label="Name"
-                  placeholder="eg. Jhon Doe"
+                  placeholder="eg. John Doe"
                 />
                 <FormField
                   control={form.control}
@@ -117,7 +123,7 @@ const CommercialSignUp = () => {
                       field={field}
                       label="Gender"
                       options={["Male", "Female"]}
-                      placeholder="Gender"
+                      placeholder="Select gender"
                     />
                   )}
                 />
@@ -127,22 +133,27 @@ const CommercialSignUp = () => {
                 form={form}
                 name="address"
                 label="Address"
-                placeholder="eg. 123, Main Street, New York"
+                placeholder="Enter your complete address"
               />
               <Button
                 type="button"
-                variant="outline"
-                className="w-full mt-4 rounded-lg"
+                variant="default"
+                className="w-full mt-6 rounded-lg h-11"
                 onClick={nextStep}
               >
-                Next Step
+                Continue
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            </div>
+            </motion.div>
           )}
 
           {currentStep === 2 && (
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-4"
+            >
               <CustomInput
                 form={form}
                 name="email"
@@ -163,32 +174,32 @@ const CommercialSignUp = () => {
                 placeholder="Re-enter your password..."
                 type="password"
               />
-              <div className="flex justify-between gap-2 mt-2">
+              <div className="grid grid-cols-2 gap-4 mt-6">
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full mt-3 rounded-lg"
+                  className="w-full h-11 rounded-lg"
                   onClick={prevStep}
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Previous
+                  Back
                 </Button>
                 <Button
                   type="submit"
-                  className="w-full mt-3 rounded-lg"
+                  className="w-full h-11 rounded-lg"
                   disabled={loading}
                 >
                   {loading ? (
-                    <div className="flex items-center">
-                      <Loader2 className="mr-2 animate-spin" />
-                      <span>Registering</span>
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <span>Creating Account</span>
                     </div>
                   ) : (
-                    "Register"
+                    "Create Account"
                   )}
                 </Button>
               </div>
-            </div>
+            </motion.div>
           )}
         </form>
       </Form>

@@ -119,7 +119,7 @@ const SignIn = () => {
 
   return (
     <motion.div
-      className="min-h-[500px] mt-[50px] mb-8"
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -129,85 +129,104 @@ const SignIn = () => {
         <meta name="description" content="" />
         <meta name="keywords" content="marsu sign in, MarSUKAT" />
       </Helmet>
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center">
+      <div className="flex w-full max-w-5xl mx-auto gap-8 flex-col md:flex-row md:items-center">
         {/* left */}
-        <LeftSideDescription
-          black="Welcome to "
-          gradient="MarSUKAT"
-          description="Sign in to get started"
-        />
+        <div className="flex-1 hidden md:flex md:flex-col md:justify-center md:items-start">
+          <div className="scale-125 transform origin-left">
+            <LeftSideDescription
+              black="Welcome to "
+              gradient="MarSUKAT"
+              description="Sign in to get started"
+            />
+          </div>
+        </div>
+
         {/* right */}
         <motion.div
-          className="flex-1"
+          className="flex-1 w-full max-w-md"
           initial={{ x: 100 }}
           animate={{ x: 0 }}
           transition={{ type: "spring", stiffness: 50 }}
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign In</CardTitle>
-              <CardDescription>
-                Sign in with your email and password.
+          <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-card dark:bg-card/95">
+            <CardHeader className="space-y-1 bg-gradient-to-r from-muted/50 to-muted/30 dark:from-muted/10 dark:to-muted/5 pb-8">
+              <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
+              <CardDescription className="text-sm">
+                Sign in with your email and password
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="pt-6">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(handleLogin)}
                   className="space-y-4"
                 >
-                  <CustomInput
-                    form={form}
-                    name="email"
-                    label="Email"
-                    placeholder="Enter your email..."
-                  />
-                  <div className="relative flex flex-col">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-4"
+                  >
                     <CustomInput
                       form={form}
-                      name="password"
-                      label="Password"
-                      placeholder="Enter your password..."
-                      type="password"
+                      name="email"
+                      label="Email"
+                      placeholder="Enter your email address"
                     />
-                    <Link
-                      to="/forgot-password"
-                      className=" right-0 bottom-0 text-sm mt-3 text-blue-400 underline hover:text-blue-500"
-                      style={{ fontFamily: "'Poppins', sans-serif" }}
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full mt-3 rounded-lg"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <div className="flex items-center">
-                        <Loader2 className="mr-2 animate-spin" />
-                        <span>Signing in</span>
+                    <div className="space-y-1">
+                      <CustomInput
+                        form={form}
+                        name="password"
+                        label="Password"
+                        placeholder="Enter your password"
+                        type="password"
+                      />
+                      <div className="flex justify-end">
+                        <Link
+                          to="/forgot-password"
+                          className="text-sm text-primary hover:text-primary/80 transition-colors"
+                        >
+                          Forgot password?
+                        </Link>
                       </div>
-                    ) : (
-                      "Sign in"
-                    )}
-                  </Button>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full h-11 rounded-lg"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <div className="flex items-center justify-center">
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <span>Signing in</span>
+                        </div>
+                      ) : (
+                        "Sign in"
+                      )}
+                    </Button>
+                  </motion.div>
                 </form>
               </Form>
             </CardContent>
           </Card>
-          <div>
-            <p className="text-center text-sm mt-4">
-              Don&apos;t have an account?{" "}
+
+          <motion.div
+            className="mt-6 text-center text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <p className="text-muted-foreground">
+              Don't have an account?{" "}
               <Link
                 to="/sign-up"
-                className="text-blue-400 underline hover:text-blue-500"
+                className="font-semibold text-primary hover:text-primary/80 transition-colors"
               >
                 Sign up
               </Link>
             </p>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
       <Toaster position="top-center" closeButton richColors />

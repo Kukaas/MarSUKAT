@@ -3,6 +3,13 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { toast, Toaster } from "sonner";
 import { notification } from "antd";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 // icons
 import { Loader2 } from "lucide-react";
@@ -101,78 +108,87 @@ const ResetPassword = () => {
 
   return (
     <motion.div
-      className="min-h-[450px] mt-[140px]"
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="min-h-[400px] mt-[100px] mb-5">
-        <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center">
-          {/* left */}
-          <motion.div
-            className="flex-1"
-            initial={{ x: -200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 100, duration: 0.6 }}
-          >
+      <div className="flex w-full max-w-5xl mx-auto gap-8 flex-col md:flex-row md:items-center">
+        {/* left */}
+        <div className="flex-1 hidden md:flex md:flex-col md:justify-center md:items-start">
+          <div className="scale-125 transform origin-left">
             <LeftSideDescription
               black="Reset "
               gradient="Password"
               description="Reset your password"
             />
-          </motion.div>
-          {/* right */}
-          <motion.div
-            className="flex-1"
-            initial={{ x: 200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 100, duration: 0.6 }}
-          >
-            <div className="flex-1">
+          </div>
+        </div>
+
+        {/* right */}
+        <motion.div
+          className="flex-1 w-full max-w-md"
+          initial={{ x: 100 }}
+          animate={{ x: 0 }}
+          transition={{ type: "spring", stiffness: 50 }}
+        >
+          <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-card dark:bg-card/95">
+            <CardHeader className="space-y-1 bg-gradient-to-r from-muted/50 to-muted/30 dark:from-muted/10 dark:to-muted/5 pb-8">
+              <CardTitle className="text-2xl font-bold">
+                Reset Password
+              </CardTitle>
+              <CardDescription className="text-sm">
+                Enter your new password below
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(handleResetPassword)}
                   className="space-y-4"
                 >
-                  <CustomInput
-                    form={form}
-                    name="password"
-                    label="Password"
-                    placeholder="Enter your new password..."
-                    type="password"
-                  />
-                  <CustomInput
-                    form={form}
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    placeholder="Confirm your new password..."
-                    type="password"
-                  />
-                  <Button
-                    type="submit"
-                    className="w-full mt-3 rounded-lg text-white text-lg"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, hsla(48, 80%, 66%, 1) 0%, hsla(0, 100%, 25%, 1) 100%)",
-                    }}
-                    disabled={loading}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-4"
                   >
-                    {loading ? (
-                      <div className="flex items-center">
-                        <Loader2 className="mr-2 animate-spin" />
-                        <span>Reseting Password</span>
-                      </div>
-                    ) : (
-                      "Reset Password"
-                    )}
-                  </Button>
+                    <CustomInput
+                      form={form}
+                      name="password"
+                      label="New Password"
+                      placeholder="Enter your new password"
+                      type="password"
+                    />
+                    <CustomInput
+                      form={form}
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      placeholder="Confirm your new password"
+                      type="password"
+                    />
+                    <Button
+                      type="submit"
+                      className="w-full h-11 rounded-lg"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <div className="flex items-center justify-center">
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <span>Resetting Password</span>
+                        </div>
+                      ) : (
+                        "Reset Password"
+                      )}
+                    </Button>
+                  </motion.div>
                 </form>
               </Form>
-            </div>
-          </motion.div>
-        </div>
-        <Toaster position="top-center" closeButton richColors />
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
+      <Toaster position="top-center" closeButton richColors />
     </motion.div>
   );
 };
