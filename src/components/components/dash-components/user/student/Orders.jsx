@@ -33,6 +33,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import AddNewReceipt from "@/components/components/forms/AddNewReceipt";
 import CustomPageTitle from "@/components/components/custom-components/CustomPageTitle";
+import { useMediaQuery } from "react-responsive";
+import OrderGrid from "@/components/components/custom-components/OrderGrid";
+import OrderDetailsModal from "@/components/components/custom-components/OrderDetailsModal";
 
 function Orders() {
   const [data, setData] = useState([]);
@@ -44,6 +47,11 @@ function Orders() {
   const [currentBalance, setCurrentBalance] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery({ maxWidth: 768 });
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
+  const [finishedProducts, setFinishedProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
   const handleViewReceipts = (order) => {
     navigate(`/orders/receipts/${order._id}`, {
@@ -140,6 +148,36 @@ function Orders() {
     setOpenReceiptForm(false);
     fetchData();
   };
+
+  const handleViewDetails = (order) => {
+    setSelectedOrderDetails(order);
+    setIsDetailsOpen(true);
+  };
+
+  useEffect(() => {
+    const fetchFinishedProduct = async () => {
+      try {
+        setLoadingProducts(true);
+        const res = await axios.get(`${BASE_URL}/api/v1/finished-product/all`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+
+        setFinishedProducts(res.data.finishedProducts);
+      } catch (error) {
+        toast.error("Failed to fetch finished products.");
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    if (isDetailsOpen) {
+      fetchFinishedProduct();
+    }
+  }, [isDetailsOpen]);
 
   const columns = [
     {
@@ -384,19 +422,10 @@ function Orders() {
                   Add New Receipt
                 </DropdownMenuItem>
               )}
-
               <DropdownMenuItem onClick={() => handleViewReceipts(order)}>
                 View Receipts
               </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigate(`/dashboard?tab=order-details`, {
-                    state: {
-                      selectedOrder: order,
-                    },
-                  });
-                }}
-              >
+              <DropdownMenuItem onClick={() => handleViewDetails(order)}>
                 View Order Details
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -424,7 +453,6 @@ function Orders() {
           style={{
             fontSize: 48,
           }}
-          x
         />
       }
     >
@@ -457,17 +485,40 @@ function Orders() {
             </AlertDialog>
           </Tooltip>
         </div>
-        <div className="rounded-md border">
+
+        <OrderGrid
+          data={data}
+          handleViewReceipts={handleViewReceipts}
+          handleDelete={handleDelete}
+          navigate={navigate}
+          currentUser={currentUser}
+          setSelectedOrder={setSelectedOrder}
+          setNewCurrentBalance={setNewCurrentBalance}
+          setOpenReceiptForm={setOpenReceiptForm}
+          loading={loading}
+          handleViewDetails={handleViewDetails}
+        />
+
+        <div className="hidden md:block rounded-md border">
           <CustomTable columns={columns} data={data} loading={loading} />
         </div>
-      </div>
-      <AlertDialog open={openReceiptForm} onOpenChange={setOpenReceiptForm}>
-        <AddNewReceipt
-          selectedOrder={selectedOrder}
-          currentBalance={currentBalance}
-          addNewReceipt={addNewReceipt}
+
+        <OrderDetailsModal
+          isOpen={isDetailsOpen}
+          onOpenChange={setIsDetailsOpen}
+          selectedOrder={selectedOrderDetails}
+          finishedProducts={finishedProducts}
+          loadingProducts={loadingProducts}
         />
-      </AlertDialog>
+
+        <AlertDialog open={openReceiptForm} onOpenChange={setOpenReceiptForm}>
+          <AddNewReceipt
+            selectedOrder={selectedOrder}
+            currentBalance={currentBalance}
+            addNewReceipt={addNewReceipt}
+          />
+        </AlertDialog>
+      </div>
     </Spin>
   );
 }
