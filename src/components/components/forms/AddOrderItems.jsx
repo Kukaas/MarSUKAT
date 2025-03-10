@@ -75,7 +75,10 @@ const AddOrderItems = ({
             productType,
           }))
           .filter(
-            (product) => !["CAP", "HOOD", "TOGA"].includes(product.productType)
+            (product) =>
+              !["CAP", "HOOD", "TOGA", "MONACO THREAD"].includes(
+                product.productType
+              )
           ); // Filter out CAP, HOOD, and TOGA
 
         setProductTypes(uniqueProductTypes);
