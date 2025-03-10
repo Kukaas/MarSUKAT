@@ -97,9 +97,27 @@ const Dashboard = ({ tab }) => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-screen">
-      {!isSmallScreen && <Sidebar />}
-      <div className="flex-1">{renderContent()}</div>
+    <div className="min-h-screen bg-background">
+      <div className="flex flex-col md:flex-row min-h-screen relative">
+        {/* Sidebar - fixed on desktop, conditional render on mobile */}
+        <div
+          className={`
+          ${!isSmallScreen ? "w-64 flex-shrink-0" : "hidden"}
+          md:block border-r border-border
+        `}
+        >
+          <div className="sticky top-0 h-screen overflow-y-auto">
+            <Sidebar />
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <main className="flex-1 flex flex-col min-h-screen">
+          <div className="flex-1 overflow-x-hidden overflow-y-auto">
+            {renderContent()}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
