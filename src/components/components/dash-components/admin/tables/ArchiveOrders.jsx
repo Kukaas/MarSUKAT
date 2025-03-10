@@ -29,6 +29,7 @@ import { statusColors } from "@/lib/utils";
 import CustomBadge from "@/components/components/custom-components/CustomBadge";
 import DataTableColumnHeader from "@/components/components/custom-components/DataTableColumnHeader";
 import CustomPageTitle from "@/components/components/custom-components/CustomPageTitle";
+import OrderDetailsModal from "@/components/components/custom-components/OrderDetailsModal";
 
 function ArchiveOrders() {
   const [data, setData] = useState([]);
@@ -37,6 +38,8 @@ function ArchiveOrders() {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false);
+  const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
 
   const handleViewReceipts = (order) => {
     navigate(`/orders/receipts/${order}`);
@@ -302,9 +305,8 @@ function ArchiveOrders() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  navigate(`/dashboard?tab=order-details`, {
-                    state: { selectedOrder: order },
-                  });
+                  setSelectedOrderDetails(order);
+                  setIsOrderDetailsOpen(true);
                 }}
               >
                 View Order Details
@@ -361,6 +363,11 @@ function ArchiveOrders() {
           <CustomTable columns={columns} data={data} loading={loading} />
         </div>
       </div>
+      <OrderDetailsModal
+        isOpen={isOrderDetailsOpen}
+        onOpenChange={setIsOrderDetailsOpen}
+        selectedOrder={selectedOrderDetails}
+      />
     </Spin>
   );
 }

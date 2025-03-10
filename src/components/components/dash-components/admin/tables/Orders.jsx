@@ -41,6 +41,7 @@ import CustomPageTitle from "@/components/components/custom-components/CustomPag
 import EditOrderItems from "@/components/components/forms/EditOrderItmes";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import OrderDetailsModal from "@/components/components/custom-components/OrderDetailsModal";
 
 function Orders() {
   const [data, setData] = useState([]);
@@ -58,6 +59,8 @@ function Orders() {
   const [rejectReason, setRejectReason] = useState("");
   const [orderToReject, setOrderToReject] = useState(null);
   const [loadingReject, setLoadingReject] = useState(false);
+  const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false);
+  const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
 
   const handleViewReceipts = (order) => {
     navigate(`/orders/receipts/${order}`);
@@ -507,9 +510,8 @@ function Orders() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  navigate(`/dashboard?tab=order-details`, {
-                    state: { selectedOrder: order },
-                  });
+                  setSelectedOrderDetails(order);
+                  setIsOrderDetailsOpen(true);
                 }}
               >
                 View Order Details
@@ -589,7 +591,7 @@ function Orders() {
                     "PENDING",
                     "APPROVED",
                     "CLAIMED",
-                    "MEASURED"
+                    "MEASURED",
                   ].includes(order.status)}
                 >
                   Claimed
@@ -769,6 +771,12 @@ function Orders() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <OrderDetailsModal
+        isOpen={isOrderDetailsOpen}
+        onOpenChange={setIsOrderDetailsOpen}
+        selectedOrder={selectedOrderDetails}
+      />
     </Spin>
   );
 }
